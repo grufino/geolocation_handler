@@ -20,18 +20,18 @@ defmodule GeolocationHandler.CsvParser.Load do
     end
   end
 
-  def validate_and_remove_header(filename) do
+  defp validate_and_remove_header(filename) do
     file_stream =
       filename
       |> File.stream!()
-      |> Stream.map(&trim_and_split/1)
+      |> CSV.decode()
 
     field_string_list =
       Geolocation.get_field_list()
       |> Enum.map(&Atom.to_string/1)
 
-    with first_row when first_row == field_string_list <- Enum.at(file_stream, 0) do
-      {:ok, Stream.take(file_stream, 1)}
+    with {:ok, first_row} when first_row == field_string_list <- Enum.at(file_stream, 0) do
+      {:ok, Stream.drop(file_stream, 0)}
     else
       _ -> {:error, "Header incompatible with Geolocation data structure"}
     end

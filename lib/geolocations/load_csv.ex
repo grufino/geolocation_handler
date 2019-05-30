@@ -1,11 +1,11 @@
-defmodule GeolocationHandler.CsvParser.Load do
+defmodule GeolocationHandler.Geolocations.LoadCsv do
   require Logger
 
   @moduledoc """
   Module responsible for validating the file, header and loading it in form of stream without header
   """
 
-  alias GeolocationHandler.Geolocation
+  alias GeolocationHandler.Geolocations.Geolocation
 
   def load_and_validate(file_path) do
     Logger.info("Loading file: #{inspect(file_path)}")

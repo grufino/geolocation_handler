@@ -37,7 +37,7 @@ defmodule GeolocationHandler.MixProject do
     [
       files: ["lib", "mix.exs", "README", "LICENSE*"],
       maintainers: ["Gabriel Rufino"],
-      licenses: ["Apache 2.0"]
+      licenses: []
     ]
   end
 

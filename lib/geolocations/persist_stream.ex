@@ -52,7 +52,7 @@ defmodule GeolocationHandler.Geolocations.PersistStream do
       %Ecto.Changeset{
         valid?: true
       } = changeset ->
-        {:ok, changeset}
+        changeset
 
       _ ->
         :error

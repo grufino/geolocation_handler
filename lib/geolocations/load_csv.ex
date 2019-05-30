@@ -15,8 +15,7 @@ defmodule GeolocationHandler.Geolocations.LoadCsv do
       {:ok, content_stream}
     else
       {:error, error_message} ->
-        {:error, "Invalid File Format, Please check the contents of the uploaded file",
-         inspect(error_message)}
+        {:error, :invalid_file, error_message}
     end
   end
 
@@ -31,9 +30,9 @@ defmodule GeolocationHandler.Geolocations.LoadCsv do
       |> Enum.map(&Atom.to_string/1)
 
     with {:ok, first_row} when first_row == field_string_list <- Enum.at(file_stream, 0) do
-      {:ok, Stream.drop(file_stream, 0)}
+      {:ok, Stream.drop(file_stream, 1)}
     else
-      _ -> {:error, "Header incompatible with Geolocation data structure"}
+      _ -> {:error, :incompatible_header}
     end
   end
 

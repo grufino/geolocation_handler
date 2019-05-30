@@ -2,6 +2,7 @@ defmodule GeolocationHandler.Geolocations.PersistStream do
   alias GeolocationHandler.Geolocations.Geolocation
 
   def persist_and_generate_metadata(geolocation_stream, repo, chunk_size \\ 1000) do
+    start_time = Timex.now()
     content_row_quantity = Enum.count(geolocation_stream)
 
     changesets = Stream.map(geolocation_stream, &put_on_changeset/1)
@@ -21,7 +22,8 @@ defmodule GeolocationHandler.Geolocations.PersistStream do
      %{
        total_rows: content_row_quantity,
        valid_rows: content_row_quantity - error_row_quantity,
-       invalid_rows: error_row_quantity
+       invalid_rows: error_row_quantity,
+       elapsed_time: Timex.diff(Timex.now(), start_time, :seconds)
      }}
   end
 

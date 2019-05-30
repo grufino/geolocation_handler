@@ -5,8 +5,8 @@ defmodule ProcessCsvTest do
   alias GeolocationHandler.RepoMock
 
   test "whole process with mock file" do
-    assert ProcessCsv.process_file("test/support/fixtures/example.csv", RepoMock) ==
-             {:ok, %{invalid_rows: 1, total_rows: 5, valid_rows: 4}}
+    assert assert {:ok, %{invalid_rows: 1, total_rows: 5, valid_rows: 4, elapsed_time: _seconds}} =
+                    ProcessCsv.process_file("test/support/fixtures/example.csv", RepoMock)
   end
 
   test "invalid file input" do

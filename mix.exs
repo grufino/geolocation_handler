@@ -46,7 +46,8 @@ defmodule GeolocationHandler.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:csv, "~> 2.3"}
+      {:csv, "~> 2.3"},
+      {:timex, "~> 3.1"}
     ]
   end
 end

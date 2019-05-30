@@ -1,12 +1,28 @@
-defmodule GeolocationHandler.Geolocations.Persist do
+defmodule GeolocationHandler.Geolocations.PersistStream do
   alias GeolocationHandler.Geolocations.Geolocation
 
-  def persist_and_generate_metadata(geolocation_stream, repo) do
+  def persist_and_generate_metadata(geolocation_stream, repo, chunk_size \\ 1000) do
     content_row_quantity = Enum.count(geolocation_stream)
 
-    geolocation_stream
-    |> Stream.map(&put_on_changeset/1)
-    |> Stream.map(fn changeset -> insert_valid(changeset, repo) end)
+    changesets = Stream.map(geolocation_stream, &put_on_changeset/1)
+
+    error_row_quantity =
+      changesets
+      |> Stream.filter(&(&1 == :error))
+      |> Enum.count()
+
+    changesets
+    |> Stream.reject(&(&1 == :error))
+    |> Stream.chunk_every(chunk_size)
+    |> Stream.each(fn chunk -> insert_chunk(chunk, repo) end)
+    |> Stream.run()
+
+    {:ok,
+     %{
+       total_rows: content_row_quantity,
+       valid_rows: content_row_quantity - error_row_quantity,
+       invalid_rows: error_row_quantity
+     }}
   end
 
   defp put_on_changeset(
@@ -43,9 +59,7 @@ defmodule GeolocationHandler.Geolocations.Persist do
 
   defp put_on_changeset({:error, _}), do: :error
 
-  defp insert_valid(:error, _repo), do: :error
-
-  defp insert_valid(changeset, repo) do
-    repo.insert(changeset)
+  def insert_chunk(geolocation_changeset_chunk, repo) do
+    repo.insert_all(Geolocation, geolocation_changeset_chunk)
   end
 end

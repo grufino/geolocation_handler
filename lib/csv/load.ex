@@ -1,4 +1,4 @@
-defmodule GeolocationHandler.Geolocations.LoadCsv do
+defmodule GeolocationHandler.Csv.Load do
   require Logger
 
   @moduledoc """

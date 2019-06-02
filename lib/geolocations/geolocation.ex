@@ -21,6 +21,7 @@ defmodule GeolocationHandler.Geolocations.Geolocation do
     |> validate_required(@field_list)
     |> validate_length(:country_code, min: 2, max: 2)
     |> validate_number(:mystery_value, greater_than: 0)
+    |> unique_constraint(:ip_address, name: "geolocations_pkey")
   end
 
   def get_field_list(), do: @field_list

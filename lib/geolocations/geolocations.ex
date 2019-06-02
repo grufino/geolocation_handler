@@ -15,13 +15,13 @@ defmodule GeolocationHandler.Geolocations do
     )
   end
 
-  def get_geolocations_by_field!(condition_field, value, repo) do
+  def get_geolocations_by_field(condition_field, value, repo) do
     geolocation_data_by_field_query(condition_field, value)
-    |> repo.all!
+    |> repo.all
   end
 
-  def get_geolocation_by_ip_query!(ip_address, repo) do
+  def get_geolocation_by_ip(ip_address, repo) do
     geolocation_by_ip_query(ip_address)
-    |> repo.one!
+    |> repo.one
   end
 end
